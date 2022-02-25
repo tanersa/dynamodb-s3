@@ -91,9 +91,13 @@ Since DynamoDB has a persistent storage, we can access the data whenever we need
    -  After parsing the json object based on our logic, it will **put the item in DynamoDB table**.
    -  Lastly, we will be able to **monitor** the logs from **CloudWatch.**
 
-
-
-
+After generating our policy with AWS Policy Generator...
+   -  Go to AWS Console and create a role, choose Lambda as your use case. Paste generated policy in permisssions section. 
+   -  Go back to IAM Roles, and create a role then **"Attach Permission Policy"**, choose your policy aftering filtering your policy name. 
+   -  Add a role name which holds above permissions.  
+   -  Our IAM role is created, now.
+   
+Now, it's time to create our Lambda function...
 
 
 
