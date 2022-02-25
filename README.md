@@ -116,7 +116,7 @@ Then choose your bucket name created before.
    -  Let's **configure** our S3 bucket more.
       Go to **Properties** and **Event Notifications** then choose **"Destination Type"** as Lambda function.
       
-Next, develop Lambda function and test it using Python code.
+Next, develop Lambda function using Python script.
           
          handler.py
         
@@ -159,13 +159,23 @@ Check the results in **CloudWatch**.
    -  Go to **CloudWatch** and **Log Groups**.
    -  You will be able to see log group is created automatically by **CloudWatch** such as **aws/lambda/dynamodb-s3**.
    -  Go to **Log Stream hyperlink** and **Log Events**. 
+   -  We successfully printed bucket name and object name with the script. 
  
 Everything comes from **"event"** parameter in our **Lambda function**
 
       def lambda_handler(event, context):
       
+Now, we have to get the content of this file from the bucket and we need to parse it then write it to DynamoDB Table. 
+To do that, we can go to BOTO3 documentation. It has lots of built-in function. 
+ 
+   -  Go to S3  and upload employee.json file then check CloudWatch. Refresh the same log group.
+   -  We can see our data which starts with **"position"** = **"DevOps"**
+
 As seen from our Lambda function, we use **BOTO3** as our **AWS SDK** where we get all the functions from.
-Lastly, in last lines we write our data in Employees table using:
+
+
+
+Lastly, in last lines we write our data in **Employees** table using:
 
           json_dict = json.loads(json_file_reader)
           table = dynamodb_client.Table('Employees')
