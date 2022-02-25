@@ -97,7 +97,92 @@ After generating our policy with AWS Policy Generator...
    -  Add a role name which holds above permissions.  
    -  Our IAM role is created, now.
    
-Now, it's time to create our Lambda function...
+Now, it's time to create our **Lambda** function...
+
+**LAMBDA**: Lambda is a serverless service. That means, we do not need to provision Lambda in order to run our code. In other words, creating an
+            instance is not needed or no need for template to provision infrastructure. 
+     
+All we need to choose is our **Runtime Environment**. During the creation of our Lambda function, choose Permissions as
+**"Use an existing role"**, then put the role name just created previously.
+
+Basically, our **Lambda function** is created. 
+
+We also need to add **Trigger** which will allow Lambda function gets triggered whenever there is upload events in S3.
+
+Then choose your bucket name created before.
+
+**Note:** Bucket created must be in same region. 
+
+   -  Let's **configure** our S3 bucket more.
+      Go to **Properties** and **Event Notifications** then choose **"Destination Type"** as Lambda function.
+      
+Next, develop Lambda function and test it using Python code.
+          
+         handler.py
+        
+         import boto3 
+         import json
+
+         s3_client = boto3.client('s3')
+         dynamodb_client = boto3.resource('dynamodb')
+
+         def lambda_handler(event, context):
+             bucket = event.get("Records")[0].get("s3").get("bucket").get("name")
+             filename = event.get("Records")[0].get("s3").get("object").get("key")
+             print(f'Print bucket name: {bucket}')
+             print(f'Print object name: {filename}')
+             json_object = s3_client.get_object(Bucket=bucket, Key=filename)
+             json_file_reader = json_object['Body'].read()
+             print(json_file_reader)
+             print(type(json_file_reader))
+             json_dict = json.loads(json_file_reader)
+             table = dynamodb_client.Table('Employees')
+             table.put_item(Item=json_dict)
+
+Additionally, create a new file called **"employee.json"** to update the file.
+
+         {
+             "position": "DevOps",
+             "location": "USA",
+             "company": "Usertech",
+             "name": "user",
+             "emp_id": "1"
+         }
+
+   -  Now, let's go ahead and upload **employee.json** file to S3 bucket
+   -  To do that, find your **bucketname** then **Objects>Uploads>Add Files**
+   -  Find employee.json and click on upload. 
+   -  File is uploaded.
+   
+Check the results in **CloudWatch**. 
+
+   -  Go to **CloudWatch** and **Log Groups**.
+   -  You will be able to see log group is created automatically by **CloudWatch** such as **aws/lambda/dynamodb-s3**.
+   -  Go to **Log Stream hyperlink** and **Log Events**. 
+ 
+Everything comes from **"event"** parameter in our **Lambda function**
+
+      def lambda_handler(event, context):
+      
+As seen from our Lambda function, we use **BOTO3** as our **AWS SDK** where we get all the functions from.
+Lastly, in last lines we write our data in Employees table using:
+
+          json_dict = json.loads(json_file_reader)
+          table = dynamodb_client.Table('Employees')
+          table.put_item(Item=json_dict)
+
+After uploading **"employee.json"**, we are able to see the data in "Employees" table.
+Lambda took care of everything!
+
+**Note:** For Lambda, we get access to **CloudWatch**. On the other hand, for CloudTrial, no need to get access. You get all API logs for events. 
+          **CloudTrial** gets audit logs only.
+ 
+
+
+
+
+
+
 
 
 
