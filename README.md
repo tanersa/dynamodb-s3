@@ -182,10 +182,18 @@ Lastly, in last lines we write our data in **Employees** table using:
           table.put_item(Item=json_dict)
 
 After uploading **"employee.json"**, we are able to see the data in "Employees" table.
+Go to **DynamoDB** on AWS Console, **"View items"** and **"Employees"** Table:
+
+      Table:
+      
+              position     location      company      name     emp_id
+              DevOps        USA          Usertech     user      1 
+           
+
 Lambda took care of everything!
 
-**Note:** For Lambda, we get access to **CloudWatch**. On the other hand, for CloudTrial, no need to get access. You get all API logs for events. 
-          **CloudTrial** gets audit logs only.
+**Note:** For Lambda, we get access to **CloudWatch**. On the other hand, for **CloudTrial**, no need to get access. You get all API 
+          logs for events. CloudTrial gets audit logs only.
  
 
 
