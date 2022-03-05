@@ -25,6 +25,7 @@
             "logs:PutLogEvents"
         ],
         "Resource": "arn:aws:logs:*:*:*"
+          
       }
     ]
   }
