@@ -4,6 +4,7 @@ import json
 s3_client = boto3.client('s3')
 dynamodb_client = boto3.resource('dynamodb')
 
+
 def lambda_handler(event, context):
     bucket = event.get("Records")[0].get("s3").get("bucket").get("name")
     filename = event.get("Records")[0].get("s3").get("object").get("key")
